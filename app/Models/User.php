@@ -18,8 +18,16 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'cpf',
+        'rg',
+        'birth_date',
+        'user_image',
+        'marital_status_id',
+        'personal_address_id',
+        'commercial_address_id'
     ];
 
     /**
@@ -43,5 +51,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function maritalStatus()
+    {
+        return $this->belongsTo(MaritalStatus::class);
+    }
+
+    public function personalAddress()
+    {
+        return $this->belongsTo(Address::class, 'personal_address_id');
+    }
+
+    public function commercialAddress()
+    {
+        return $this->belongsTo(Address::class, 'commercial_address_id');
     }
 }
