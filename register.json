@@ -1,0 +1,44 @@
+{
+    "user": {
+        "name": "",
+        "username": "",
+        "email": "",
+        "password": "",
+        "cpf": "",
+        "rg": "",
+        "birth_date": "",
+        "user_image": "",
+        "marital_status_id": ""
+    },
+    "personal_address": {
+        "zipcode": "",
+        "address": "",
+        "number": "",
+        "complement": "",
+        "district": "",
+        "state_id": "",
+        "city_id": ""
+    },
+    "commercial_address": {
+        "zipcode": "",
+        "address": "",
+        "number": "",
+        "complement": "",
+        "district": "",
+        "state_id": "",
+        "city_id": ""
+    },
+    "references": [
+        { "value": "" },
+        { "value": "" },
+        { "value": "" }
+    ],
+    "loan": {
+        "loan_image": "",
+        "value": "",
+        "loan_maturity": "",
+        "loan_description": "",
+        "user_id": "",
+        "loan_modality_id": ""
+    }
+}

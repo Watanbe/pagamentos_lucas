@@ -10,11 +10,11 @@ class Address extends Model
     use HasFactory;
 
     protected $fillable = [
+        'zipcode',
         'address',
         'number',
         'complement',
         'district',
-        'city',
         'state_id',
         'city_id'
     ];
