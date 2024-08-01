@@ -4,6 +4,7 @@ namespace App\Architecture\Services\User;
 
 use App\Architecture\DTO\User\UserRegisterDTO;
 use App\Models\User;
+use Carbon\Carbon;
 
 class UserService {
 
@@ -15,7 +16,7 @@ class UserService {
             'password' => $userRegisterDTO->password,
             'cpf' => $userRegisterDTO->cpf,
             'rg' => $userRegisterDTO->rg,
-            'birth_date' => $userRegisterDTO->birthDate,
+            'birth_date' => Carbon::createFromFormat('d/m/Y', $userRegisterDTO->birthDate)->format('Y-m-d'),
             'user_image' => $userRegisterDTO->userImage,
             'marital_status_id' => $userRegisterDTO->maritalStatusId,
             'personal_address_id' => $userRegisterDTO->personalAddressId,

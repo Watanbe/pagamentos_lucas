@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Architecture\DTO\Address\AddressRegisterDTO;
+use App\Architecture\DTO\Reference\ReferenceRegisterDTO;
 use App\Architecture\DTO\User\UserRegisterDTO;
 use App\Architecture\Services\Address\AddressService;
+use App\Architecture\Services\Reference\ReferenceService;
 use App\Architecture\Services\User\UserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,13 +15,16 @@ class RegisterController extends Controller {
 
     public function __construct(
         protected AddressService $addressService,
-        protected UserService $userService
+        protected UserService $userService,
+        protected ReferenceService $referenceService
     )
     {
     }
 
     public function register(Request $request) {
         try {
+
+            // dd($request->references);
 
             $personalAddress = $request->personal_address;
             $personalAddressDTO = new AddressRegisterDTO(
@@ -58,9 +63,13 @@ class RegisterController extends Controller {
                 personalAddressId: $personalAddress->id,
                 commercialAddressId: $commercialAddress->id,
             );
-
             $user = $this->userService->create($userDTO);
 
+            $references = $request->references;
+            foreach ($references as $reference) {
+                $referenceDTO = new ReferenceRegisterDTO(value: $reference['value']);
+                $this->referenceService->create($referenceDTO, $user->id);
+            }
 
 
         } catch (Exception $e) {
