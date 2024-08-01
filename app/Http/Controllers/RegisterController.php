@@ -27,20 +27,19 @@ class RegisterController extends Controller {
                 stateId: $personalAddress["state_id"],
                 cityId: $personalAddress["city_id"]
             );
+            $personalAddress = $this->addressService->create($personalAddressDTO);
 
-            $this->addressService->create($personalAddressDTO);
-
-            // $commercialAddress = $request->commercial_address;
-            // $commercialAddressDTO = new AddressRegisterDTO(
-            //     zipcode: $commercialAddress["zipcode"],
-            //     address: $commercialAddress["address"],
-            //     number: $commercialAddress["number"],
-            //     complement: $commercialAddress["complement"],
-            //     district: $commercialAddress["district"],
-            //     stateId: $commercialAddress["state_id"],
-            //     cityId: $commercialAddress["city_id"]
-            // );
-            // dd($commercialAddressDTO);
+            $commercialAddress = $request->commercial_address;
+            $commercialAddressDTO = new AddressRegisterDTO(
+                zipcode: $commercialAddress["zipcode"],
+                address: $commercialAddress["address"],
+                number: $commercialAddress["number"],
+                complement: $commercialAddress["complement"],
+                district: $commercialAddress["district"],
+                stateId: $commercialAddress["state_id"],
+                cityId: $commercialAddress["city_id"]
+            );
+            $commercialAddress = $this->addressService->create($commercialAddressDTO);
 
         } catch (Exception $e) {
             dd($e);
