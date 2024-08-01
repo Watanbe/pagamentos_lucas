@@ -9,7 +9,14 @@ class UserLoan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['loan_image', 'value', 'user_id', 'loan_modality_id'];
+    protected $fillable = [
+        'loan_image',
+        'value',
+        'loan_maturity',
+        'loan_description',
+        'user_id',
+        'loan_modality_id'
+    ];
 
     public function user()
     {

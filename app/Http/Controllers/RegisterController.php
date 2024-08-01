@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Architecture\DTO\Address\AddressRegisterDTO;
 use App\Architecture\DTO\Reference\ReferenceRegisterDTO;
 use App\Architecture\DTO\User\UserRegisterDTO;
+use App\Architecture\DTO\UserLoan\UserLoanRegisterDTO;
 use App\Architecture\Services\Address\AddressService;
 use App\Architecture\Services\Reference\ReferenceService;
 use App\Architecture\Services\User\UserService;
+use App\Architecture\Services\UserLoan\UserLoanService;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -16,15 +18,14 @@ class RegisterController extends Controller {
     public function __construct(
         protected AddressService $addressService,
         protected UserService $userService,
-        protected ReferenceService $referenceService
+        protected ReferenceService $referenceService,
+        protected UserLoanService $userLoanService
     )
     {
     }
 
     public function register(Request $request) {
         try {
-
-            // dd($request->references);
 
             $personalAddress = $request->personal_address;
             $personalAddressDTO = new AddressRegisterDTO(
@@ -71,7 +72,27 @@ class RegisterController extends Controller {
                 $this->referenceService->create($referenceDTO, $user->id);
             }
 
+            $loan = $request->loan;
+            $loanDTO = new UserLoanRegisterDTO(
+                loanImage: $loan['loan_image'],
+                value: $loan['value'],
+                loanMaturity: $loan['loan_maturity'],
+                loanDescription: $loan['loan_description'],
+                userId: $user->id,
+                loanModalityId: $loan['loan_modality_id'],
+            );
 
+            $loan = $this->userLoanService->create($loanDTO);
+
+            $response = [
+                "user" => $user,
+                "personal_address" => $personalAddress,
+                "commercial_addres" => $commercialAddress,
+                "references" => $references,
+                "loan" => $loan
+            ];
+
+            return response()->json($response);
         } catch (Exception $e) {
             dd($e);
         }
