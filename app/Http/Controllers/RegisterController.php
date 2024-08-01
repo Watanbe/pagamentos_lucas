@@ -8,6 +8,7 @@ use App\Architecture\DTO\User\UserRegisterDTO;
 use App\Architecture\DTO\UserLoan\UserLoanRegisterDTO;
 use App\Architecture\Services\Address\AddressService;
 use App\Architecture\Services\Reference\ReferenceService;
+use App\Architecture\Services\Upload\UploadService;
 use App\Architecture\Services\User\UserService;
 use App\Architecture\Services\UserLoan\UserLoanService;
 use Exception;
@@ -19,7 +20,8 @@ class RegisterController extends Controller {
         protected AddressService $addressService,
         protected UserService $userService,
         protected ReferenceService $referenceService,
-        protected UserLoanService $userLoanService
+        protected UserLoanService $userLoanService,
+        protected UploadService $uploadService
     )
     {
     }
@@ -51,6 +53,7 @@ class RegisterController extends Controller {
             $commercialAddress = $this->addressService->create($commercialAddressDTO);
 
             $user = $request->user;
+            $userImagePath = $this->uploadService->uploadImage($user["user_image"]);
             $userDTO = new UserRegisterDTO(
                 name: $user["name"],
                 username: $user["username"],
@@ -59,7 +62,7 @@ class RegisterController extends Controller {
                 cpf: $user["cpf"],
                 rg: $user["rg"],
                 birthDate: $user["birth_date"],
-                userImage: $user["user_image"],
+                userImage: $userImagePath,
                 maritalStatusId: $user["marital_status_id"],
                 personalAddressId: $personalAddress->id,
                 commercialAddressId: $commercialAddress->id,
@@ -73,8 +76,9 @@ class RegisterController extends Controller {
             }
 
             $loan = $request->loan;
+            $loanImagePath = $this->uploadService->uploadImage($loan["loan_image"]);
             $loanDTO = new UserLoanRegisterDTO(
-                loanImage: $loan['loan_image'],
+                loanImage: $loanImagePath,
                 value: $loan['value'],
                 loanMaturity: $loan['loan_maturity'],
                 loanDescription: $loan['loan_description'],
@@ -89,7 +93,8 @@ class RegisterController extends Controller {
                 "personal_address" => $personalAddress,
                 "commercial_addres" => $commercialAddress,
                 "references" => $references,
-                "loan" => $loan
+                "loan" => $loan,
+                "user_image" => asset('storage/'.$user->user_image)
             ];
 
             return response()->json($response);
