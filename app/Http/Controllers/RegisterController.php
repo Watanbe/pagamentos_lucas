@@ -13,6 +13,7 @@ use App\Architecture\Services\User\UserService;
 use App\Architecture\Services\UserLoan\UserLoanService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller {
 
@@ -28,6 +29,8 @@ class RegisterController extends Controller {
 
     public function register(Request $request) {
         try {
+
+            DB::beginTransaction();
 
             $personalAddress = $request->personal_address;
             $personalAddressDTO = new AddressRegisterDTO(
@@ -97,9 +100,11 @@ class RegisterController extends Controller {
                 "user_image" => asset('storage/'.$user->user_image)
             ];
 
+            DB::commit();
+
             return response()->json($response);
         } catch (Exception $e) {
-            dd($e);
+            DB::rollBack();
         }
     }
 
