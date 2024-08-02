@@ -22,7 +22,9 @@ class UsersController extends Controller {
 
             return response()->json($user);
         } catch(Exception $e) {
-            dd($e);
+            return response()->json([
+                'error' => 'An error occurred while processing your request.'
+            ], 500);
         }
     }
 

@@ -100,9 +100,12 @@ class RegisterController extends Controller {
             ];
 
             DB::commit();
-            return response()->json($response);
+            return response()->json($response, 200);
         } catch (Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'error' => 'An error occurred while processing your request.'
+            ], 500);
         }
     }
 
