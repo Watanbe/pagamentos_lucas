@@ -32,9 +32,4 @@ class UserLoan extends Model
     {
         return $this->hasMany(LoanImages::class);
     }
-
-    public function getLoanImageAttribute($value)
-    {
-        return asset('storage/' . $value);
-    }
 }

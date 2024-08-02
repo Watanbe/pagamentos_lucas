@@ -13,4 +13,9 @@ class LoanImages extends Model
         'loan_image',
         'user_loan_id'
     ];
+
+    public function getLoanImageAttribute($value)
+    {
+        return asset('storage/' . $value);
+    }
 }

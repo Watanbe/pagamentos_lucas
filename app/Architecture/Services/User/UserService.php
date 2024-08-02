@@ -42,6 +42,7 @@ class UserService {
         return User::with([
             'maritalStatus',
             'loans.loanModality',
+            'loans.loanImages',
             'references',
             'personalAddress.city',
             'personalAddress.state',
