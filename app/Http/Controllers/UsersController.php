@@ -17,7 +17,6 @@ class UsersController extends Controller {
     public function getById(int $id) {
         try {
             $user = $this->userService->getById($id);
-
             $user = new UserResource($user);
 
             return response()->json($user);

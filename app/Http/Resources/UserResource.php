@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
+            'cpf' => $this->cpf,
             'birth_date' => $this->birth_date,
             'user_image' => $this->user_image,
             'marital_status' => new MaritalStatusResource($this->whenLoaded('maritalStatus')),
