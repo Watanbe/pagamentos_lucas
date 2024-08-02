@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Architecture\Services\User\UserService;
+use App\Http\Resources\UserResource;
 use Exception;
 
 class UsersController extends Controller {
@@ -16,6 +17,8 @@ class UsersController extends Controller {
     public function getById(int $id) {
         try {
             $user = $this->userService->getById($id);
+
+            $user = new UserResource($user);
 
             return response()->json($user);
         } catch(Exception $e) {
