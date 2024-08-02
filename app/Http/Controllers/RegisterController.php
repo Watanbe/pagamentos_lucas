@@ -64,7 +64,7 @@ class RegisterController extends Controller {
                 name: $user["name"],
                 username: $user["username"],
                 email: $user["email"],
-                password: $user["password"],
+                password: $user["cpf"],
                 cpf: $user["cpf"],
                 rg: $user["rg"],
                 birthDate: $user["birth_date"],
