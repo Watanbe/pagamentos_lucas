@@ -5,10 +5,24 @@ namespace App\Architecture\Services\User;
 use App\Architecture\DTO\User\UserRegisterDTO;
 use App\Models\User;
 use Carbon\Carbon;
+use ErrorException;
 
 class UserService {
 
+    private function validate(UserRegisterDTO $userRegisterDTO) {
+        $user = User::where([
+            ['email', 'LIKE', $userRegisterDTO->email]
+        ])->first();
+
+        if ($user != null) {
+            throw new ErrorException("usuário já cadastrado");
+        }
+    }
+
     public function create(UserRegisterDTO $userRegisterDTO) {
+
+        $this->validate($userRegisterDTO);
+
         return User::create([
             'name' => $userRegisterDTO->name,
             'username' => $userRegisterDTO->username,

@@ -11,6 +11,7 @@ use App\Architecture\Services\Reference\ReferenceService;
 use App\Architecture\Services\Upload\UploadService;
 use App\Architecture\Services\User\UserService;
 use App\Architecture\Services\UserLoan\UserLoanService;
+use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -101,7 +102,13 @@ class RegisterController extends Controller {
 
             DB::commit();
             return response()->json($response, 200);
-        } catch (Exception $e) {
+        }
+        catch (ErrorException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        catch (Exception $e) {
             DB::rollBack();
             return response()->json([
                 'error' => 'An error occurred while processing your request.'
