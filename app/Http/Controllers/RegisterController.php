@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Architecture\DTO\Address\AddressRegisterDTO;
 use App\Architecture\DTO\Reference\ReferenceRegisterDTO;
 use App\Architecture\DTO\User\UserRegisterDTO;
+use App\Architecture\DTO\UserLoan\UserLoanImagesRegisterDTO;
 use App\Architecture\DTO\UserLoan\UserLoanRegisterDTO;
 use App\Architecture\Services\Address\AddressService;
 use App\Architecture\Services\Reference\ReferenceService;
 use App\Architecture\Services\Upload\UploadService;
 use App\Architecture\Services\User\UserService;
+use App\Architecture\Services\UserLoan\UserLoanImageService;
 use App\Architecture\Services\UserLoan\UserLoanService;
 use ErrorException;
 use Exception;
@@ -23,7 +25,8 @@ class RegisterController extends Controller {
         protected UserService $userService,
         protected ReferenceService $referenceService,
         protected UserLoanService $userLoanService,
-        protected UploadService $uploadService
+        protected UploadService $uploadService,
+        protected UserLoanImageService $userLoanImageService
     )
     {
     }
@@ -78,18 +81,20 @@ class RegisterController extends Controller {
                 $this->referenceService->create($referenceDTO);
             }
 
-            $loan = $request->loan;
-            $loanImagePath = $this->uploadService->uploadImage($loan["loan_image"]);
+            $loanRequest = $request->loan;
             $loanDTO = new UserLoanRegisterDTO(
-                loanImage: $loanImagePath,
-                value: $loan['value'],
-                loanMaturity: $loan['loan_maturity'],
-                loanDescription: $loan['loan_description'],
+                value: $loanRequest['value'],
+                loanMaturity: $loanRequest['loan_maturity'],
+                loanDescription: $loanRequest['loan_description'],
                 userId: $user->id,
-                loanModalityId: $loan['loan_modality_id'],
+                loanModalityId: $loanRequest['loan_modality_id'],
             );
-
             $loan = $this->userLoanService->create($loanDTO);
+
+            foreach ($loanRequest['loan_images'] as $image) {
+                $userLoanImageDTO = new UserLoanImagesRegisterDTO(image: $image, loanId: $loan->id);
+                $this->userLoanImageService->create($userLoanImageDTO);
+            }
 
             $response = [
                 "user" => $user,

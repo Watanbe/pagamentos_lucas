@@ -10,7 +10,6 @@ class UserLoanService {
 
     public function create(UserLoanRegisterDTO $userLoanRegisterDTO) {
         return UserLoan::create([
-            'loan_image' => $userLoanRegisterDTO->loanImage,
             'value' => $userLoanRegisterDTO->value,
             'loan_maturity' => Carbon::createFromFormat('d/m/Y', $userLoanRegisterDTO->loanMaturity)->format('Y-m-d'),
             'loan_description' => $userLoanRegisterDTO->loanDescription,
