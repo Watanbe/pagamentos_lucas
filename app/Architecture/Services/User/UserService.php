@@ -23,4 +23,15 @@ class UserService {
             'commercial_address_id' => $userRegisterDTO->commercialAddressId
         ]);
     }
+
+    public function getById($userId) {
+        return User::with([
+            'maritalStatus',
+            'loans.loanModality',
+            'personalAddress.city',
+            'personalAddress.state',
+            'commercialAddress.city',
+            'commercialAddress.state'
+        ])->find($userId);
+    }
 }

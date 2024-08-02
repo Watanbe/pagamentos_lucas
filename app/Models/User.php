@@ -67,4 +67,18 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Address::class, 'commercial_address_id');
     }
+
+    public function loans() {
+        return $this->hasMany(UserLoan::class);
+    }
+
+    public function references()
+    {
+        return $this->hasMany(Reference::class);
+    }
+
+    public function getUserImageAttribute($value)
+    {
+        return asset('storage/' . $value);
+    }
 }

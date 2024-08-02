@@ -10,4 +10,9 @@ class Reference extends Model
     use HasFactory;
 
     protected $fillable = ['value'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

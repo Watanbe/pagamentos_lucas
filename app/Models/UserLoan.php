@@ -27,4 +27,9 @@ class UserLoan extends Model
     {
         return $this->belongsTo(LoanModality::class);
     }
+
+    public function getLoanImageAttribute($value)
+    {
+        return asset('storage/' . $value);
+    }
 }
