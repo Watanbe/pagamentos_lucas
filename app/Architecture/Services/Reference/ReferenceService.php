@@ -8,14 +8,10 @@ use App\Models\UserReference;
 
 class ReferenceService {
 
-    public function create(ReferenceRegisterDTO $referenceRegisterDTO, int $userId) {
+    public function create(ReferenceRegisterDTO $referenceRegisterDTO) {
         $reference = Reference::create([
-            'value' => $referenceRegisterDTO->value
-        ]);
-
-        UserReference::create([
-            'user_id' => $userId,
-            'reference_id' => $reference->id
+            'value' => $referenceRegisterDTO->value,
+            'user_id' => $referenceRegisterDTO->userId
         ]);
     }
 }

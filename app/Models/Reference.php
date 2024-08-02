@@ -9,7 +9,7 @@ class Reference extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['value'];
+    protected $fillable = ['value', 'user_id'];
 
     public function user()
     {

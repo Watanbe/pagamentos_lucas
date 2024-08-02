@@ -29,7 +29,6 @@ class RegisterController extends Controller {
 
     public function register(Request $request) {
         try {
-
             DB::beginTransaction();
 
             $personalAddress = $request->personal_address;
@@ -74,8 +73,8 @@ class RegisterController extends Controller {
 
             $references = $request->references;
             foreach ($references as $reference) {
-                $referenceDTO = new ReferenceRegisterDTO(value: $reference['value']);
-                $this->referenceService->create($referenceDTO, $user->id);
+                $referenceDTO = new ReferenceRegisterDTO(value: $reference['value'], userId: $user->id);
+                $this->referenceService->create($referenceDTO);
             }
 
             $loan = $request->loan;
@@ -101,7 +100,6 @@ class RegisterController extends Controller {
             ];
 
             DB::commit();
-
             return response()->json($response);
         } catch (Exception $e) {
             DB::rollBack();
