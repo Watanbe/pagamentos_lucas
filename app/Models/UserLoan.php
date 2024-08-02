@@ -18,6 +18,17 @@ class UserLoan extends Model
         'loan_modality_id'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($loan) {
+            $loan->loanImages()->each(function ($loanImage) {
+                $loanImage->delete();
+            });
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

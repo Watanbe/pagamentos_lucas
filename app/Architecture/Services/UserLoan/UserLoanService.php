@@ -17,4 +17,21 @@ class UserLoanService {
             'loan_modality_id' => $userLoanRegisterDTO->loanModalityId
         ]);
     }
+
+    public function getByUser(int $userId) {
+        return UserLoan::with([
+            'loanModality',
+            'loanImages'
+        ])
+        ->where([
+            ["user_id", "=", $userId]
+        ])->get();
+    }
+
+    public function getById(int $id) {
+        return UserLoan::with([
+            'loanModality',
+            'loanImages'
+        ])->find($id);
+    }
 }
