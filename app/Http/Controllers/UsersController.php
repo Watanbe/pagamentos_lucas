@@ -16,7 +16,6 @@ class UsersController extends Controller {
     public function getById(int $id) {
         try {
             $user = $this->userService->getById($id);
-            dd($user);
 
             return response()->json($user);
         } catch(Exception $e) {
