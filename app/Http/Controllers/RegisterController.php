@@ -92,7 +92,8 @@ class RegisterController extends Controller {
             $loan = $this->userLoanService->create($loanDTO);
 
             foreach ($loanRequest['loan_images'] as $image) {
-                $userLoanImageDTO = new UserLoanImagesRegisterDTO(image: $image, loanId: $loan->id);
+                $imagePath = $this->uploadService->uploadImage($image);
+                $userLoanImageDTO = new UserLoanImagesRegisterDTO(image: $imagePath, loanId: $loan->id);
                 $this->userLoanImageService->create($userLoanImageDTO);
             }
 
