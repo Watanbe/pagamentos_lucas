@@ -21,6 +21,7 @@ class LoanResource extends JsonResource
             'loan_images' => LoanImageResource::collection($this->whenLoaded('loanImages')),
             'value' => $this->value,
             'loan_maturity' => $this->loan_maturity,
+            'installments' => $this->installments,
             'loan_creation' => Carbon::parse($this->created_at)->format('Y-m-d'),
             'loan_description' => $this->loan_description,
             'loan_modality' => new LoanModalityResource($this->whenLoaded('loanModality')),
