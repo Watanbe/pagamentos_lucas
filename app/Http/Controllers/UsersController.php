@@ -40,4 +40,27 @@ class UsersController extends Controller {
 
     }
 
+    public function getAll() {
+        try {
+            $users = [];
+            $usersRaw = $this->userService->getAll();
+
+            foreach ($usersRaw as $user) {
+                $users[] = new UserResource($user);
+            }
+
+            return response()->json($users);
+        }
+        catch (ErrorException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 404);
+        }
+        catch(Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while processing your request.'
+            ], 500);
+        }
+    }
+
 }

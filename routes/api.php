@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("register", [RegisterController::class, "register"]);
 Route::get("users/{id}", [UsersController::class, "getById"]);
+Route::get("users", [UsersController::class, "getAll"]);
 
 Route::post("loan", [LoansController::class, "create"]);
 Route::get("loan/get-by-user/{id}", [LoansController::class, "getByUser"]);

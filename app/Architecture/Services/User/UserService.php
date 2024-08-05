@@ -50,4 +50,17 @@ class UserService {
             'commercialAddress.state'
         ])->find($userId);
     }
+
+    public function getAll() {
+        return User::with([
+            'maritalStatus',
+            'loans.loanModality',
+            'loans.loanImages',
+            'references',
+            'personalAddress.city',
+            'personalAddress.state',
+            'commercialAddress.city',
+            'commercialAddress.state'
+        ])->get();
+    }
 }
