@@ -13,6 +13,7 @@ class UserLoan extends Model
         'loan_image',
         'value',
         'loan_maturity',
+        'installments',
         'loan_description',
         'user_id',
         'loan_modality_id'

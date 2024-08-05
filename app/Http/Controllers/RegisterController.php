@@ -85,6 +85,7 @@ class RegisterController extends Controller {
             $loanDTO = new UserLoanRegisterDTO(
                 value: $loanRequest['value'],
                 loanMaturity: $loanRequest['loan_maturity'],
+                installments: $loanRequest['installments'],
                 loanDescription: $loanRequest['loan_description'],
                 userId: $user->id,
                 loanModalityId: $loanRequest['loan_modality_id'],

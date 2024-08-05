@@ -28,6 +28,7 @@ class LoansController extends Controller {
             $loanDTO = new UserLoanRegisterDTO(
                 value: $request->value,
                 loanMaturity: $request->loan_maturity,
+                installments: $request->installments,
                 loanDescription: $request->loan_description,
                 userId: $request->user_id,
                 loanModalityId: $request->loan_modality_id,
