@@ -10,6 +10,7 @@ class UserLoanRegisterDTO {
         public string $loanDescription,
         public int $userId,
         public int $loanModalityId,
+        public bool $paid
     )
     {
     }

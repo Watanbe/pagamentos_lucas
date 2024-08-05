@@ -15,6 +15,7 @@ Route::post("loan", [LoansController::class, "create"]);
 Route::get("loan/get-by-user/{id}", [LoansController::class, "getByUser"]);
 Route::get("loan/get-by-id/{id}", [LoansController::class, "getById"]);
 Route::delete("loan/{id}", [LoansController::class, "delete"]);
+Route::put("loan/{id}", [LoansController::class, "update"]);
 
 
 Route::get("states", [DefaultsController::class, "getStates"]);

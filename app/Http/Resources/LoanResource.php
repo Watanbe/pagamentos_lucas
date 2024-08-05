@@ -22,6 +22,7 @@ class LoanResource extends JsonResource
             'value' => $this->value,
             'loan_maturity' => $this->loan_maturity,
             'installments' => $this->installments,
+            'paid' => $this->paid,
             'loan_creation' => Carbon::parse($this->created_at)->format('Y-m-d'),
             'loan_description' => $this->loan_description,
             'loan_modality' => new LoanModalityResource($this->whenLoaded('loanModality')),
