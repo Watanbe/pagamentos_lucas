@@ -89,6 +89,7 @@ class RegisterController extends Controller {
                 loanDescription: $loanRequest['loan_description'],
                 userId: $user->id,
                 loanModalityId: $loanRequest['loan_modality_id'],
+                paid: 0
             );
             $loan = $this->userLoanService->create($loanDTO);
 
