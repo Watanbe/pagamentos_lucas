@@ -47,6 +47,7 @@ class RegisterController extends Controller {
                 stateId: $personalAddress["state_id"],
                 cityId: $personalAddress["city_id"]
             );
+
             $commercialAddress = $request->commercial_address;
             $commercialAddressDTO = new AddressRegisterDTO(
                 zipcode: $commercialAddress["zipcode"],
@@ -59,6 +60,7 @@ class RegisterController extends Controller {
             );
             $personalAddress = $this->addressService->create($personalAddressDTO);
             $commercialAddress = $this->addressService->create($commercialAddressDTO);
+
 
             $user = $request->user;
             $userImagePath = $this->uploadService->uploadImage($user["user_image"]);

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class UploadService {
     public function uploadImage(string $imageBase64) {
         // Extract the image extension from the base64 string
-        preg_match("/^data:image\/(.*);base64/i", $imageBase64, $match);
+        preg_match("/^data:image\/([a-zA-Z0-9]+);base64/i", $imageBase64, $match);
         $extension = $match[1]; // Get the extension from the base64 data
 
         // Remove the base64 prefix to get the actual image data
