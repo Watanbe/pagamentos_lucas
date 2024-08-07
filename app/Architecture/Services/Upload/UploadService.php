@@ -12,7 +12,7 @@ class UploadService {
         $extension = $match[1]; // Get the extension from the base64 data
 
         // Remove the base64 prefix to get the actual image data
-        $image = base64_decode(preg_replace('/^data:image\/(.*);base64,/', '', $imageBase64));
+        $image = base64_decode(preg_replace('/^data:image\/([a-zA-Z0-9]+);base64/i', '', $imageBase64));
 
         // Generate a unique filename
         $imageName = Str::random(10) . '.' . $extension;

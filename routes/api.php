@@ -22,3 +22,8 @@ Route::get("states", [DefaultsController::class, "getStates"]);
 Route::get("cities/{id}", [DefaultsController::class, "getCitiesByState"]);
 Route::get("marital-status", [DefaultsController::class, "maritalStatus"]);
 Route::get("loan-modalities", [DefaultsController::class, "loanModality"]);
+
+
+Route::get("ini", function () {
+    return phpinfo();
+});
