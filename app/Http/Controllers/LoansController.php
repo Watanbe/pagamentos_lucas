@@ -8,8 +8,9 @@ use App\Architecture\Services\Upload\UploadService;
 use App\Architecture\Services\UserLoan\UserLoanImageService;
 use App\Architecture\Services\UserLoan\UserLoanService;
 use App\Http\Resources\LoanResource;
-use ErrorException;
+use InvalidArgumentException;
 use Exception;
+use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,8 +24,13 @@ class LoansController extends Controller {
     {
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         try {
+            $this->validateRequest($request);
+
+            DB::beginTransaction();
+
             $loanDTO = new UserLoanRegisterDTO(
                 value: $request->value,
                 loanMaturity: $request->loan_maturity,
@@ -32,25 +38,44 @@ class LoansController extends Controller {
                 loanDescription: $request->loan_description,
                 userId: $request->user_id,
                 loanModalityId: $request->loan_modality_id,
-                paid: 0
+                paid: false
             );
             $loan = $this->userLoanService->create($loanDTO);
 
+            $loanImages = [];
             foreach ($request->loan_images as $image) {
                 $imagePath = $this->uploadService->uploadImage($image);
                 $userLoanImageDTO = new UserLoanImagesRegisterDTO(image: $imagePath, loanId: $loan->id);
-                $this->userLoanImageService->create($userLoanImageDTO);
+                $loanImage = $this->userLoanImageService->create($userLoanImageDTO);
+                $loanImages[] = $loanImage;
             }
 
+            DB::commit();
+
             $response = [
-                "loan" => $loan
+                "loan" => $loan,
+                "loan_images" => $loanImages
             ];
-            return response()->json($response, 200);
+            return response()->json($response, 201);
+        }
+        catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'messages' => $e->errors()
+            ], 422);
+        }
+        catch (InvalidArgumentException $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
         }
         catch (Exception $e) {
+            DB::rollBack();
             return response()->json([
-                'error' => 'An error occurred while processing your request.'
-            ], 500);
+                'error' => 'An error occurred while processing your request.',
+                'message' => $e->getMessage()
+            ], 400);
         }
     }
 
@@ -159,6 +184,22 @@ class LoansController extends Controller {
                 'error' => 'An error occurred while processing your request.'
             ], 500);
         }
+    }
+
+    private function validateRequest(Request $request)
+    {
+        $rules = [
+            'value' => 'required|numeric|min:0',
+            'loan_maturity' => 'required|date_format:d/m/Y',
+            'installments' => 'required|integer|min:1',
+            'loan_description' => 'required|string',
+            'user_id' => 'required|integer|exists:users,id',
+            'loan_modality_id' => 'required|integer|exists:loan_modalities,id',
+            'loan_images' => 'required|array',
+            'loan_images.*' => 'required|string'
+        ];
+
+        $request->validate($rules);
     }
 
 }

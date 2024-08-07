@@ -13,8 +13,9 @@ use App\Architecture\Services\Upload\UploadService;
 use App\Architecture\Services\User\UserService;
 use App\Architecture\Services\UserLoan\UserLoanImageService;
 use App\Architecture\Services\UserLoan\UserLoanService;
-use ErrorException;
+use InvalidArgumentException;
 use Exception;
+use ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,7 @@ class RegisterController extends Controller {
 
     public function register(Request $request) {
         try {
+            $this->validateRequest($request);
             DB::beginTransaction();
 
             $personalAddress = $request->personal_address;
@@ -111,17 +113,72 @@ class RegisterController extends Controller {
             DB::commit();
             return response()->json($response, 200);
         }
-        catch (ErrorException $e) {
+        catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'messages' => $e->errors()
+            ], 422);
+        }
+        catch (InvalidArgumentException $e) {
+            DB::rollBack();
             return response()->json([
                 'error' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
         catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'error' => 'An error occurred while processing your request.'
-            ], 500);
+                'error' => $e->getMessage()
+            ], 400);
         }
+    }
+
+    private function validateRequest(Request $request)
+    {
+        $rules = [
+            'user' => 'required|array',
+            'user.name' => 'required|string',
+            'user.username' => 'required|string',
+            'user.email' => 'required|email',
+            'user.password' => 'required|string|min:6',
+            'user.cpf' => 'required|string',
+            'user.rg' => 'required|string',
+            'user.birth_date' => 'required|date_format:d/m/Y',
+            'user.user_image' => 'required|string',
+            'user.marital_status_id' => 'required|string',
+
+            'personal_address' => 'required|array',
+            'personal_address.zipcode' => 'required|string',
+            'personal_address.address' => 'required|string',
+            'personal_address.number' => 'required|string',
+            'personal_address.complement' => 'nullable|string',
+            'personal_address.district' => 'required|string',
+            'personal_address.state_id' => 'required|string',
+            'personal_address.city_id' => 'required|string',
+
+            'commercial_address' => 'required|array',
+            'commercial_address.zipcode' => 'required|string',
+            'commercial_address.address' => 'required|string',
+            'commercial_address.number' => 'required|string',
+            'commercial_address.complement' => 'nullable|string',
+            'commercial_address.district' => 'required|string',
+            'commercial_address.state_id' => 'required|string',
+            'commercial_address.city_id' => 'required|string',
+
+            'references' => 'required|array',
+            'references.*.value' => 'required|string',
+
+            'loan' => 'required|array',
+            'loan.loan_images' => 'required|array',
+            'loan.loan_images.*' => 'required|string',
+            'loan.value' => 'required|string',
+            'loan.loan_maturity' => 'required|date_format:d/m/Y',
+            'loan.loan_description' => 'required|string',
+            'loan.loan_modality_id' => 'required|string',
+            'loan.installments' => 'required|integer',
+        ];
+
+        $request->validate($rules);
     }
 
 }
